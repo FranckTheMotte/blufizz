@@ -1,0 +1,15 @@
+*.orig
+*.o
+*.lo
+*.la
+*.so
+*.swp
+*.pc
+.deps
+.libs
+Makefile
+Makefile.in
+/build/
+/Doxyfile
+/html/
+/INSTALL
