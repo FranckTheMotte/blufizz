@@ -16,7 +16,6 @@ pkg_check_modules(sqlite3 IMPORTED_TARGET sqlite3)
 
 set(SOURCE_FILES
     src/main.cpp
-    src/Bluetooth_Device.cpp
     src/Bluez_AdapterController.cpp
     src/Bluez_AdapterManager.cpp
     src/Bluez_DeviceClient.cpp

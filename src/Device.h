@@ -12,7 +12,7 @@
 #include <nlohmann/json.hpp>
 
 /* Local header files. */
-#include "Service.h"
+#include "Bluez_Gatt.h"
 
 namespace device {
 
