@@ -12,3 +12,6 @@ Works better with public address, device with random address can be recorded mul
 # TODO list
 - wifi devices
 - gps localisation
+- catch exceptions
+- add a limit on recorded devices during a session
+- sanity checks
