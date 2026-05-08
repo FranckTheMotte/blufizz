@@ -19,6 +19,9 @@ public:
   BluFizz(bluetooth::bluez::BluezAdapterController &adapter);
   ~BluFizz();
 
+  /**
+   * @brief Main task.
+   */
   void run();
 
 private:

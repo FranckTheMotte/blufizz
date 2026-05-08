@@ -253,26 +253,6 @@ void BluezDeviceClient::fetchProfile(std::shared_ptr<device::Device> &device)
   }
 }
 
-std::string BluezDeviceClient::readDeviceName(const std::string &charPath)
-{
-  sdbus::ObjectPath objectPath{charPath};
-  sdbus::ServiceName destination(B_SERVICE_NAME);
-
-  auto proxy = sdbus::createProxy(*connection_, destination, objectPath);
-
-  std::vector<uint8_t> value;
-
-  std::map<std::string, sdbus::Variant> options;
-
-  proxy->callMethod(B_GATT_CHARAC_READVALUE_METHOD)
-  .onInterface(B_GATT_CHARAC_INTERFACE)
-  .withArguments(options)
-  .storeResultsTo(value);
-
-  // Convert byte array → string
-  return std::string(value.begin(), value.end());
-}
-
 template<typename T> std::optional<T> BluezDeviceClient::getPropertyUnsafe(const std::shared_ptr<sdbus::IProxy> &proxy, std::string propertyName)
 {
   try {

@@ -16,9 +16,9 @@ public:
   BluezDeviceConnector(BluezDeviceClient &client);
   virtual ~BluezDeviceConnector() = default;
 
-  virtual int connect(const std::string &objectPath);
-  virtual int disconnect(const std::string &objectPath);
-  virtual void fetchProfile(std::shared_ptr<device::Device> &device);
+  virtual int connect(const std::string &objectPath) override;
+  virtual int disconnect(const std::string &objectPath) override;
+  virtual void fetchProfile(std::shared_ptr<device::Device> &device) override;
 
 private:
   /**

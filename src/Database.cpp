@@ -200,12 +200,12 @@ void Database::bindValue(
 
 void Database::updateDevice(device::Device &device)
 {
-  updateDevices(device);
+  updateDeviceReference(device);
   updateDeviceDetails(device);
   updateDeviceObservations(device);
 }
 
-void Database::updateDevices(device::Device &device)
+void Database::updateDeviceReference(device::Device &device)
 {
   sqlite3_stmt *stmt = nullptr;
 
@@ -278,8 +278,6 @@ void Database::updateDevices(device::Device &device)
   rc = sqlite3_step(stmt);
 
   if (rc != SQLITE_DONE) {
-    std::cout << "BBBB4 " << device.stableIdentifier() << " " << utcTime << "\n";
-
     std::string error = sqlite3_errmsg(db_);
     sqlite3_finalize(stmt);
     throw std::runtime_error(error);

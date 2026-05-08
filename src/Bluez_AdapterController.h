@@ -51,19 +51,19 @@ public:
   /**
    * @brief Enable (power) of the adapter.
    */
-  virtual void enable();
+  virtual void enable() override;
 
   /**
    * @brief Disable (power) of the adapter.
    */
-  virtual void disable();
+  virtual void disable() override;
 
   /**
    * @brief Power status of the adapter.
    *
    * @return true if enable, false otherwise.
    */
-  virtual bool isEnabled() const;
+  virtual bool isEnabled() const override;
 
   /**
    * @brief Start a scan.
@@ -72,7 +72,7 @@ public:
    * - @c 0 on success.
    * - @c -1 otherwise.
    */
-  virtual int startScan();
+  virtual int startScan() override;
 
   /**
    * @brief Start a scan.
@@ -81,7 +81,7 @@ public:
    * - @c 0 on success.
    * - @c -1 otherwise.
    */
-  virtual int stopScan();
+  virtual int stopScan() override;
 
   /**
    * @brief Remove a remote device from cache.
@@ -92,7 +92,7 @@ public:
    * - @c 0 on success.
    * - @c -1 otherwise.
    */
-  virtual int removeDevice(std::string objectPath);
+  virtual int removeDevice(std::string objectPath) override;
 
   /**
    * @name getters

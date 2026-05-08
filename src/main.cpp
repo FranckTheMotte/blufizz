@@ -20,6 +20,11 @@ std::mutex exitMutex;
 std::condition_variable cv;
 bool exit = false;
 
+/**
+ * @brief Handler to exit program by signals.
+ * 
+ * @param s Signal value.
+ */
 void signalHandler(int s)
 {
   {
@@ -29,6 +34,9 @@ void signalHandler(int s)
   cv.notify_one();
 }
 
+/**
+ * @brief Main loop.
+ */
 int run()
 {
   std::unique_lock lock(exitMutex);

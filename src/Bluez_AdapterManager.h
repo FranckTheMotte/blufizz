@@ -63,6 +63,10 @@ private:
    * @brief Share D-Bus connection.
    */
   std::shared_ptr<sdbus::IConnection> connection_;
+
+  /**
+   * @brief Map of bluez adapters.
+   */
   std::unordered_map<std::string, std::unique_ptr<BluezAdapterController>> adapters_;
 
   /**

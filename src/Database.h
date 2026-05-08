@@ -57,13 +57,30 @@ private:
   void exec(const char *sql);
 
   /**
-   * @brief Initialize tables.
+   * @brief Initialize sql tables.
    */
   void initializeSchema();
 
+  /**
+   * @brief Update device reference if it doesn't exist.
+   * Id of the device will be updated if new.
+   * 
+   * @param device A device.
+   */
+  void updateDeviceReference(device::Device &device);
 
-  void updateDevices(device::Device &device);
+  /**
+   * @brief Add or update device details.
+   * 
+   * @param device A device.
+   */
   void updateDeviceDetails(const device::Device &device);
+
+  /**
+   * @brief Update device obvervations.
+   * 
+   * @param device A device.
+   */
   void updateDeviceObservations(const device::Device &device);
 
   /**

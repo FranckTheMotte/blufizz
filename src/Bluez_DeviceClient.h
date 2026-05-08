@@ -107,12 +107,17 @@ private:
    */
   const std::shared_ptr<sdbus::IProxy> &objectManagerProxy_;
 
+  /**
+   * @brief Wait for device's services to be resolved.
+   * 
+   * @param devicePath Bluez path to the device.
+   * @param timeout Timeout in sec (default 10s).
+   * 
+   * @return True if resolved, false otherwise.
+   */
   bool waitForServicesResolved(
     const std::string &devicePath,
     std::chrono::seconds timeout = std::chrono::seconds{10});
-
-  std::string readDeviceName(const std::string &charPath);
-
 };
 
 } // namespace bluetooth::bluez

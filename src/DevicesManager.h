@@ -10,6 +10,10 @@
 
 namespace device {
 
+/**
+ * @brief Handle devices during current session.
+ *
+ */
 class DevicesManager
 {
 public:
@@ -20,6 +24,11 @@ public:
     return devices_;
   }
 
+  /**
+   * @brief Insert a device in the known devices.
+   * 
+   * @param device A device.
+   */
   void insert(const std::shared_ptr<Device> device);
 
 private:
