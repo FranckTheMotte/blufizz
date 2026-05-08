@@ -65,8 +65,6 @@ private:
    * @brief The task manager.
    */
   blufizz::tools::TaskManager &taskManager_;
-
-  uint32_t deviceId_ = 0;
 };
 
 } /* bluez namespace */

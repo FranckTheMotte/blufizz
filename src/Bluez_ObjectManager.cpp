@@ -76,9 +76,7 @@ void ObjectManager::onInterfacesAdded(
   if (it == properties.end()) {
     rssi = it->second.get<int16_t>();
   }
-  deviceId_++;
   auto device = std::make_shared<device::Device>(
-                  deviceId_,
                   "",
                   properties.at("Address").get<std::string>(),
                   objectPath,

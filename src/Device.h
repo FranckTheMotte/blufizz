@@ -25,7 +25,17 @@ public:
   using ManufacturerData = std::map<uint16_t, ByteArray>;
   using ServiceData = std::map<std::string, ByteArray>;
 
-  Device(uint32_t id, std::string firstDatetime, std::string address, std::string objectPath, std::string name, bool connected, int rssi);
+  /**
+   * @brief Create a new device.
+   *
+   * @param firstDateTime UTC date time when the device is seen.
+   * @param address Physical address.
+   * @param objectPath Bluez path to the device.
+   * @param name Device's name.
+   * @param connected Connected state.
+   * @param rssi Rssi.
+   */
+  Device(std::string firstDatetime, std::string address, std::string objectPath, std::string name, bool connected, int rssi);
   ~Device() = default;
 
   /**
@@ -208,7 +218,7 @@ public:
 
   /**
    * @brief get the stable identifier.
-   * 
+   *
    * @param A string with format : "AA:BB:CC:DD:EE:FF/<public|random>".
    */
   std::string stableIdentifier();

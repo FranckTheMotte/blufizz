@@ -8,14 +8,12 @@
 
 namespace device {
 
-Device::Device(uint32_t id,
-               std::string firstDatetime,
+Device::Device(std::string firstDatetime,
                std::string address,
                std::string objectPath,
                std::string name,
                bool connected,
                int rssi) :
-  id_(id),
   firstDateTime_(firstDatetime),
   address_(address),
   objectPath_(objectPath),
