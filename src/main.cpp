@@ -12,6 +12,7 @@
 #include "Bluez_DeviceConnector.h"
 #include "DevicesManager.h"
 #include "BluFizz.h"
+#include "GpsdClient.h"
 #include "TaskManager.h"
 
 namespace {
@@ -70,9 +71,13 @@ int main(void)
   bluetooth::bluez::BluezDeviceClient deviceClient(connection, B_SERVICE_NAME, objectManagerProxy);
   bluetooth::bluez::BluezDeviceConnector deviceConnector(deviceClient);
 
+  // Optional GPS, if init failed the gps will be recorded with a failed status.
+  location::GpsdClient gps;
+  gps.init();
+
   // Manager
   device::DevicesManager devicesManager;
-  storage::Database database("/tmp/blue.sqlite3");
+  storage::Database database("/tmp/blue.sqlite3", gps);
   blufizz::tools::TaskManager taskManager(deviceConnector, devicesManager, database);
 
   bluetooth::bluez::BluezAdapterManager manager(connection, objectManagerProxy, taskManager);

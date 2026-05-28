@@ -9,7 +9,8 @@
 
 namespace storage {
 
-Database::Database(const std::string &path)
+Database::Database(const std::string &path, location::GpsdClient &gps) :
+  gps_(gps)
 {
   int rc = sqlite3_open_v2(
              path.c_str(),
@@ -115,15 +116,13 @@ void Database::initializeSchema()
         CREATE TABLE IF NOT EXISTS radio_observations (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             device_id INTEGER NOT NULL,
-            radio_type TEXT NOT NULL,
             observed_at_utc TEXT NOT NULL,
-            interface_name TEXT NOT NULL,
             signal_dbm INTEGER,
             gps_status TEXT NOT NULL,
             gps_latitude REAL,
             gps_longitude REAL,
+            gps_altitude REAL,
             raw_json TEXT,
-            created_at_utc TEXT NOT NULL,
             FOREIGN KEY(device_id) REFERENCES radio_devices(id)
         );
     )SQL");
@@ -196,6 +195,15 @@ void Database::bindValue(
 )
 {
   sqlite3_bind_int64(stmt, index, static_cast<sqlite3_int64>(value));
+}
+
+void Database::bindValue(
+  sqlite3_stmt *stmt,
+  int index,
+  double value
+)
+{
+  sqlite3_bind_double(stmt, index, value);
 }
 
 void Database::updateDevice(device::Device &device)
@@ -405,6 +413,61 @@ void Database::updateDeviceDetails(const device::Device &device)
 
 void Database::updateDeviceObservations(const device::Device &device)
 {
+  // TODO check the number of entries before adding one
+  // put a hardcoded limit
+
+  // retrieve the gps coordinates
+  location::GpsFix gpsFix;
+  bool gpsReading = false;
+  if (gps_.available()) {
+    if (gps_.read(gpsFix) == 0) {
+      gpsReading = true;
+    }
+  }
+
+  const char *sql = R"SQL(
+        INSERT INTO radio_observations (
+            device_id,
+            observed_at_utc,
+            signal_dbm,
+            gps_status,
+            gps_latitude,
+            gps_longitude,
+            gps_altitude,
+            raw_json
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+  )SQL";
+
+  sqlite3_stmt *stmt = nullptr;
+
+  int rc = sqlite3_prepare_v2(db_, sql, -1, &stmt, nullptr);
+
+  if (rc != SQLITE_OK) {
+    throw std::runtime_error(sqlite3_errmsg(db_));
+  }
+
+  sqlite3_bind_int64(stmt, 1, device.id());
+  bindValue(stmt, 2, currentUtcTime());
+
+  bindValue(stmt, 3, device.rssi());
+
+  bindValue(stmt, 4, gpsReading && gps_.available());
+  bindValue(stmt, 5, gpsFix.latitude);
+  bindValue(stmt, 6, gpsFix.longitude);
+  bindValue(stmt, 7, gpsFix.altitude);
+
+  bindValue(stmt, 8, std::string("TODO"));
+
+  rc = sqlite3_step(stmt);
+
+  if (rc != SQLITE_DONE) {
+    std::string error = sqlite3_errmsg(db_);
+    sqlite3_finalize(stmt);
+    throw std::runtime_error(error);
+  }
+
+  sqlite3_finalize(stmt);
 }
 
 std::optional<int64_t> Database::findRadioDeviceId(

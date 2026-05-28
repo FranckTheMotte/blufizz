@@ -8,6 +8,7 @@
 
 /* Local headers. */
 #include "Device.h"
+#include "GpsdClient.h"
 
 namespace storage {
 /**
@@ -20,8 +21,9 @@ public:
    * @brief Initialiazation of database tables.
    *
    * @param path Path to stored database.
+   * @param gps  Gps location provider.
    */
-  explicit Database(const std::string &path);
+  explicit Database(const std::string &path, location::GpsdClient &gps);
 
   ~Database();
 
@@ -47,6 +49,12 @@ private:
    */
   sqlite3 *db_ = nullptr;
 
+
+  /**
+   * @brief Gps location provider.
+   */
+  location::GpsdClient &gps_;
+
   /**
    * @brief Execute a sql query with One-Step Query Execution Interface.
    *
@@ -64,21 +72,21 @@ private:
   /**
    * @brief Update device reference if it doesn't exist.
    * Id of the device will be updated if new.
-   * 
+   *
    * @param device A device.
    */
   void updateDeviceReference(device::Device &device);
 
   /**
    * @brief Add or update device details.
-   * 
+   *
    * @param device A device.
    */
   void updateDeviceDetails(const device::Device &device);
 
   /**
    * @brief Update device obvervations.
-   * 
+   *
    * @param device A device.
    */
   void updateDeviceObservations(const device::Device &device);
@@ -147,6 +155,16 @@ private:
                  int index,
                  int64_t value);
 
+  /**
+   * @brief Bind double to prepared statements.
+   *
+   * @param stmt sqlite3 statement object.
+   * @param index index of the SQL parameter to be set.
+   * @param value value to bind.
+   */
+  void bindValue(sqlite3_stmt *stmt,
+                 int index,
+                 double value);
   /**
    * @brief Retrieve a device id in radio_devices table.
    *

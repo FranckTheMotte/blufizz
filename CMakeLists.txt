@@ -9,6 +9,8 @@ find_package(PkgConfig REQUIRED)
 # external dependencies
 # dbus c++
 pkg_check_modules(sdbus-c++ IMPORTED_TARGET sdbus-c++)
+# libgps
+pkg_check_modules(libgps IMPORTED_TARGET libgps)
 # nlohmann-json3
 pkg_check_modules(nlohmann_json IMPORTED_TARGET nlohmann_json)
 # sqlite3
@@ -21,10 +23,11 @@ set(SOURCE_FILES
     src/Bluez_DeviceClient.cpp
     src/Bluez_DeviceConnector.cpp
     src/Bluez_ObjectManager.cpp
+    src/BluFizz.cpp
     src/Database.cpp
     src/DevicesManager.cpp
     src/Device.cpp
-    src/BluFizz.cpp
+    src/GpsdClient.cpp
     src/TaskManager.cpp
     src/Tools.cpp)
 
@@ -34,4 +37,8 @@ add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 # SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_INCLUDE_ORDER_FLAGS}")
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
-target_link_libraries(${PROJECT_NAME} PRIVATE PkgConfig::nlohmann_json PkgConfig::sdbus-c++ PkgConfig::sqlite3)
+target_link_libraries(${PROJECT_NAME} 
+                      PRIVATE PkgConfig::libgps
+                              PkgConfig::nlohmann_json 
+                              PkgConfig::sdbus-c++
+                              PkgConfig::sqlite3)
