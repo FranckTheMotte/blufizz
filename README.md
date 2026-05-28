@@ -24,7 +24,7 @@ main
  └── BluFizz                 – main scan loop
 ```
 
-See [`blufizz_class_diagram.puml`](doc/blufizz_class_diagram.puml) for the full PlantUML class diagram.
+See [`blufizz_class_diagram.plantuml`](doc/class_diagram.plantuml) for the full PlantUML class diagram.
 
 ---
 
@@ -102,6 +102,7 @@ The SQLite database is created at `/tmp/blue.sqlite3` on first run.
 
 Planned or incomplete:
 
+- [ ] Handle update event of bluetooth devices.
 - [ ] Wi-Fi device scanning
 - [ ] GPS geo-tagging (in progress — GpsdClient exists, integration pending)
 - [ ] Exception handling throughout the codebase (plan remove exceptions (compiler options))
@@ -109,6 +110,9 @@ Planned or incomplete:
 - [ ] Limit on the number of devices recorded per session
 - [ ] Input sanity checks
 - [ ] Configuration file (adapter path, database path, …)
+- [ ] Tests
+- [ ] Add capability to start, pause or stop a session from an external device (smartphone, ...)
+- [ ] Record gps trace of a session.
 
 ---
 
