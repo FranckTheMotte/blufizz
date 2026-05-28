@@ -1,0 +1,139 @@
+@startuml blufizz
+
+title Blufizz - Class Diagram (Simplified)
+
+' ── Namespaces / packages ────────────────────────────────────────
+
+package "blufizz" {
+  class BluFizz {
+    .. Application entry point ..
+    Orchestrates the main scan loop
+  }
+}
+
+package "blufizz::tools" {
+  class TaskManager {
+    .. Async task queue ..
+    FIFO worker thread for device events
+  }
+}
+
+package "adapter" {
+  interface IAdapterController {
+    .. BT adapter lifecycle ..
+    Power on/off, start/stop scan
+  }
+}
+
+package "bluetooth::bluez" {
+  class BluezAdapterManager {
+    .. BT adapter registry ..
+    Creates and looks up adapters by D-Bus path
+  }
+
+  class BluezAdapterController {
+    .. BlueZ adapter abstraction ..
+    D-Bus proxy for org.bluez.Adapter1
+  }
+
+  class ObjectManager {
+    .. BlueZ event listener ..
+    Catches InterfacesAdded / InterfacesRemoved
+  }
+
+  class BluezDeviceClient {
+    .. Low-level device access ..
+    Connect / disconnect / fetch properties via D-Bus
+  }
+
+  class BluezDeviceConnector {
+    .. Device connector (BlueZ impl) ..
+    Delegates to BluezDeviceClient
+  }
+}
+
+package "device" {
+  interface IDeviceConnector {
+    .. Device lifecycle interface ..
+    Connect, disconnect, fetchProfile
+  }
+
+  class Device {
+    .. BT device model ..
+    Address, name, RSSI, GATT profile, …
+  }
+
+  class DevicesManager {
+    .. In-session device registry ..
+    Stores known devices by address
+  }
+}
+
+package "storage" {
+  class Database {
+    .. SQLite persistence ..
+    Upserts device references, details, observations
+  }
+}
+
+package "location" {
+  class GpsdClient {
+    .. GPS coordinates provider ..
+    Reads lat/long/alt from gpsd
+  }
+}
+
+' ── Structs / value types ────────────────────────────────────────
+
+package "GATT model" {
+  struct DeviceGattProfile {
+    .. Gatt profile ..
+    Services & characteristics per device
+  }
+
+  struct Service {
+    .. Gatt service ..
+    UUID + list of characteristics
+  }
+
+  struct Characteristic {
+    .. Gatt characteristic ..
+    UUID + service path
+  }
+}
+
+' ── Relationships ────────────────────────────────────────────────
+
+' Application layer
+BluFizz --> BluezAdapterController : uses
+
+' Adapter manager creates controllers, listens through ObjectManager
+BluezAdapterManager --> BluezAdapterController : creates / manages
+BluezAdapterManager *-- ObjectManager : contains
+BluezAdapterManager --> TaskManager : notifies
+
+' ObjectManager feeds TaskManager
+ObjectManager --> TaskManager : pushes tasks
+
+' Inheritance & interface implementations
+BluezAdapterController ..|> IAdapterController : implements
+BluezDeviceConnector ..|> IDeviceConnector : implements
+BluezDeviceConnector --> BluezDeviceClient : delegates
+
+' TaskManager orchestrates core services
+TaskManager --> IDeviceConnector : uses
+TaskManager --> DevicesManager : uses
+TaskManager --> Database : uses
+
+' Device / profile
+BluezDeviceClient --> Device : populates
+Device *-- DeviceGattProfile : has
+DeviceGattProfile *-- Service : has
+Service *-- Characteristic : has
+DevicesManager --> Device : stores
+
+' Storage
+Database --> Device : persists
+Database --> GpsdClient : reads location from
+
+@enduml
