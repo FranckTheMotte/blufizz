@@ -24,7 +24,7 @@ main
  └── BluFizz                 – main scan loop
 ```
 
-See [`blufizz_class_diagram.puml`](blufizz_class_diagram.puml) for the full PlantUML class diagram.
+See [`blufizz_class_diagram.puml`](doc/blufizz_class_diagram.puml) for the full PlantUML class diagram.
 
 ---
 
