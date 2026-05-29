@@ -42,3 +42,5 @@ target_link_libraries(${PROJECT_NAME}
                               PkgConfig::nlohmann_json 
                               PkgConfig::sdbus-c++
                               PkgConfig::sqlite3)
+
+install(TARGETS blufizz DESTINATION bin)
