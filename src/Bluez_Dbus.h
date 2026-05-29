@@ -21,6 +21,22 @@ constexpr char B_ADAPTER_INTERFACE[] = "org.bluez.Adapter1";
 constexpr char B_ADAPTER_POWERED_PROP[] = "Powered";
 
 /**
+ * @brief Set Discovery Filter method.
+ */
+constexpr char B_SET_DISCOVERY_FILTER_METHOD[] = "SetDiscoveryFilter";
+
+/**
+ * @name Filter section.
+ *
+ * @{
+ */
+constexpr char B_DISCO_FILTER_TRANSPORT[] = "Transport";
+constexpr char B_DISCO_FILTER_TRANSPORT_LE[] = "le";
+constexpr char B_DISCO_FILTER_DUPLICATEDATA[] = "DuplicateData";
+
+/** @} */
+
+/**
  * @brief Start Discovery method.
  */
 constexpr char B_START_DISCOVERY_METHOD[] = "StartDiscovery";

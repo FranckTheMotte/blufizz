@@ -103,6 +103,7 @@ The SQLite database is created at `/tmp/blue.sqlite3` on first run.
 Planned or incomplete:
 
 - [ ] Handle update event of bluetooth devices.
+- [ ] Add load-balancing method for sequential BR/EDR and LE scans.
 - [ ] Wi-Fi device scanning
 - [ ] GPS geo-tagging (in progress — GpsdClient exists, integration pending)
 - [ ] Exception handling throughout the codebase (plan remove exceptions (compiler options))

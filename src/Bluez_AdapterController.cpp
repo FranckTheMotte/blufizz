@@ -1,4 +1,5 @@
 /* Standard C++ header files. */
+#include <map>
 
 /* Local header files. */
 #include "Bluez_AdapterController.h"
@@ -84,6 +85,21 @@ bool BluezAdapterController::getPowered() const
 int BluezAdapterController::startScan()
 {
   try {
+    std::map<std::string, sdbus::Variant> filters = {
+      {
+        // only LE device to catch more devices.
+        // until distributing scan timing between BR/EDR and LE.
+        B_DISCO_FILTER_TRANSPORT,
+        sdbus::Variant{std::string{B_DISCO_FILTER_TRANSPORT_LE}}
+      },
+      {
+        // better for continuous observation
+        B_DISCO_FILTER_DUPLICATEDATA,
+        sdbus::Variant{true}
+      }
+    };
+
+    proxy_->callMethod(B_SET_DISCOVERY_FILTER_METHOD).onInterface(B_ADAPTER_INTERFACE).withArguments(filters);
     proxy_->callMethod(B_START_DISCOVERY_METHOD).onInterface(B_ADAPTER_INTERFACE);
     return 0;
   } catch (const sdbus::Error &e) {
